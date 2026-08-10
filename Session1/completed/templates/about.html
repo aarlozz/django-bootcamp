@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}
+About - Student Management System
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+
+    <div class="col-md-8">
+
+        <h1>About the Project</h1>
+
+        <p class="lead">
+            The Student Management System is a learning project
+            built using Django.
+        </p>
+
+        <p>
+            In Session 1, we are building the foundation of the
+            application using Django views, URLs, templates,
+            template inheritance, and Bootstrap.
+        </p>
+
+        <a
+            href="{% url 'home' %}"
+            class="btn btn-primary"
+        >
+            Back to Home
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
