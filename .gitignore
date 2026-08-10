@@ -1,0 +1,207 @@
+# ============================================================
+# Django Web Development Bootcamp
+# Python / Django / VS Code / OS / Environment Files
+# ============================================================
+
+
+# ============================================================
+# PYTHON
+# ============================================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Python build / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+*.egg
+pip-wheel-metadata/
+
+
+# ============================================================
+# VIRTUAL ENVIRONMENTS
+# ============================================================
+
+venv/
+.venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+
+# ============================================================
+# DJANGO
+# ============================================================
+
+# Local development database
+db.sqlite3
+db.sqlite3-journal
+
+# Collected static files
+staticfiles/
+
+# User uploaded media
+media/
+
+# Local Django settings
+local_settings.py
+
+
+# ============================================================
+# ENVIRONMENT VARIABLES & SECRETS
+# ============================================================
+
+.env
+.env.*
+!.env.example
+
+# Credentials / secret files
+secrets.json
+credentials.json
+service-account.json
+
+# Certificates / private keys
+*.pem
+*.key
+*.crt
+
+
+# ============================================================
+# TESTING & COVERAGE
+# ============================================================
+
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.cover
+
+.tox/
+.nox/
+.hypothesis/
+
+
+# ============================================================
+# TYPE CHECKERS / LINTERS / FORMATTERS
+# ============================================================
+
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.ruff_cache/
+
+
+# ============================================================
+# JUPYTER NOTEBOOKS
+# ============================================================
+
+.ipynb_checkpoints/
+
+
+# ============================================================
+# VISUAL STUDIO CODE
+# ============================================================
+
+.vscode/
+
+
+# ============================================================
+# PYCHARM / JETBRAINS
+# ============================================================
+
+.idea/
+
+
+# ============================================================
+# OTHER EDITORS
+# ============================================================
+
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+
+# ============================================================
+# OPERATING SYSTEM FILES
+# ============================================================
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+[Dd]esktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+.directory
+.Trash-*
+
+
+# ============================================================
+# LOGS
+# ============================================================
+
+*.log
+logs/
+
+
+# ============================================================
+# TEMPORARY / BACKUP FILES
+# ============================================================
+
+*.tmp
+*.temp
+*.bak
+*.backup
+*.orig
+*.old
+
+
+# ============================================================
+# NODE.JS
+# ============================================================
+
+# Included in case frontend tooling is introduced later.
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+
+# ============================================================
+# BUILD / CACHE FILES
+# ============================================================
+
+.cache/
+
+
+# ============================================================
+# LOCAL DEVELOPMENT / RUNTIME FILES
+# ============================================================
+
+*.pid
+*.pid.lock
+
+
+# ============================================================
+# GENERATED FILES
+# ============================================================
+
+*.generated.*
