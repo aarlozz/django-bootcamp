@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home - Student Management System
+{% endblock %}
+
+{% block content %}
+
+<div class="p-5 mb-4 bg-light rounded-3">
+
+    <div class="container-fluid py-4">
+
+        <h1 class="display-5 fw-bold">
+            Student Management System
+        </h1>
+
+        <p class="col-md-8 fs-5">
+            A Django web application being developed during
+            our Django Web Development Bootcamp.
+        </p>
+
+        <a
+            href="{% url 'student-list' %}"
+            class="btn btn-primary btn-lg"
+        >
+            View Students
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
