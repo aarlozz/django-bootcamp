@@ -1164,7 +1164,7 @@ Copy it — you'll paste it into your web service's environment variables in the
 | -------------- | ----------------------------------------------------------------- |
 | Name           | `student-management` (or any name you like)                       |
 | Runtime        | Python 3                                                           |
-| Build Command  | `pip install -r requirements.txt && python manage.py collectstatic --no-input` |
+| Build Command  | `pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate && python manage.py createsuperuser --noinput || true` |
 | Start Command  | `gunicorn config.wsgi`                                             |
 
 ---
@@ -1178,6 +1178,9 @@ In your Web Service's **Environment** tab, add:
 | `SECRET_KEY`            | a new random string, e.g. `your-secret-key`             |
 | `DEBUG`                 | `False`                                                 |
 | `DATABASE_URL`          | the Internal Database URL you copied in step 31         |
+| `DJANGO_SUPERUSER_USERNAME` | admin         |
+| `DJANGO_SUPERUSER_EMAIL` | admin@example.com         |
+| `DJANGO_SUPERUSER_PASSWORD` | Strong@123         |
 
 > Never paste your *actual* secret values into a README, a commit, or a chat message — the values above are placeholders. Generate your own `SECRET_KEY`, for example with:
 > ```bash
