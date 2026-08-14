@@ -1,407 +1,415 @@
-Session 3 — Authentication, GitHub & Deployment
-Turn It Into a Real Application
+# Session 3 — Authentication, GitHub & Deployment
 
-Django Web Development Bootcamp — Session 3
+## Turn It Into a Real Application
 
-Welcome to Session 3 of the Django Web Development Bootcamp.
+> **Django Web Development Bootcamp — Session 3**
 
-In Session 1, we built the basic structure of our Student Management System using Django URLs, views, templates, Bootstrap, and template inheritance.
+Welcome to **Session 3** — the final session of the Django Web Development Bootcamp.
 
-In Session 2, we made the application dynamic by connecting Django to SQLite and implementing database-backed CRUD operations.
+In Session 1, we built the foundation of our **Student Management System** using Django URLs, views, templates, template inheritance, and Bootstrap.
 
-In this session, we will take the same project one step further by adding authentication, Git/GitHub, and deployment.
+In Session 2, we connected the application to a database and implemented full CRUD (Create, Read, Update, Delete) for student records using a `Student` model, `ModelForm`, and SQLite.
 
-🎯 Session Goal
+Today, we take the application the rest of the way. We will:
+
+* Add authentication, so only logged-in users can manage students
+* Push the project to GitHub
+* Connect the project to a production PostgreSQL database
+* Deploy the application to Render
+* Test the finished, **live** Student Management System
+
+---
+
+## 🎯 Session Goal
 
 By the end of this session, you will transform your application from:
 
-DATABASE + CRUD
-       ↓
-AUTHENTICATION
-       ↓
-GIT + GITHUB
-       ↓
-PRODUCTION DATABASE
-       ↓
-DEPLOYMENT
-       ↓
-LIVE APPLICATION
+```text
+LOCAL, UNPROTECTED, DATABASE-BACKED APPLICATION
+                    ↓
+AUTHENTICATED APPLICATION
+                    ↓
+VERSION-CONTROLLED APPLICATION (GITHUB)
+                    ↓
+PRODUCTION-READY APPLICATION (POSTGRESQL)
+                    ↓
+🌐 LIVE, DEPLOYED APPLICATION (RENDER)
+```
 
-Our Student Management System will now become an application that can:
+---
 
-Register users
-Log users in
-Log users out
-Protect student management pages
-Track code with Git
-Store the project on GitHub
-Use PostgreSQL in production
-Run as a deployed Django application
-🧠 What We Will Build
+# 🧭 The Bootcamp Journey So Far
 
-Our Student Management System will gradually become:
+```text
+Session 1
+Static Django Website
+        ↓
+Session 2
+Dynamic CRUD Application
+        ↓
+Session 3
+Authenticated Application
+        ↓
+GitHub
+        ↓
+PostgreSQL
+        ↓
+Render
+        ↓
+🌐 LIVE STUDENT MANAGEMENT SYSTEM
+```
 
-                  Student Management System
-                           │
-          ┌────────────────┼────────────────┐
-          │                │                │
-          ↓                ↓                ↓
-    Authentication     Students          Admin
-          │                │
-     ┌────┼────┐           ↓
-     ↓    ↓    ↓         CRUD
- Register Login Logout     │
-          │           ┌────┼────┐
-          │           ↓    ↓    ↓
-          │         Create Read Update
-          │                 │
-          │                 ↓
-          │               Delete
-          │                 │
-          └─────────────────┤
-                            ↓
-                       PostgreSQL
-                            │
-                            ↓
-                          Render
-                            │
-                            ↓
-                     Live Application
+Each stage builds directly on the one before it:
 
-By the end of this session, the project will no longer be only a local Django application.
+* **Session 1** gave the application URLs, views, and templates — the skeleton.
+* **Session 2** gave the application a database, a model, and CRUD — the ability to actually store and manage data.
+* **Session 3** makes that data safe (only logged-in users can touch it), puts the code under version control, and moves the whole application from your laptop onto the public internet.
 
-It will be a deployed web application that can be accessed through the internet.
+Nothing from Sessions 1 or 2 gets thrown away or rebuilt. We are only **adding** to the existing `students` app inside the existing `student-management` project.
 
-📚 Session 3 Learning Objectives
+---
 
-During this session, you will learn how to:
+# 📚 Session 3 Learning Objectives
 
-Understand Django authentication
-Understand users and sessions
-Create a registration page
-Use Django's built-in authentication system
-Implement login
-Implement logout
-Display the authenticated user
-Protect views using login_required
-Understand Git
-Initialize a Git repository
-Create a .gitignore
-Create commits
-Create a GitHub repository
-Push the Django project to GitHub
-Understand why SQLite is useful for development
-Understand why PostgreSQL is suitable for production
-Connect Django to PostgreSQL
-Use environment variables
-Configure static files for deployment
-Create a deployment build script
-Deploy the Django application to Render
-Run production migrations
-Create a production superuser
-Test authentication and CRUD on the live application
-⏱️ Suggested 3-Hour Workshop Plan
-Time	Topic
-0:00 – 0:10	Recap of Session 2
-0:10 – 0:45	Django Authentication
-0:45 – 1:15	Login, Logout & Protected Pages
-1:15 – 1:25	Short Break
-1:25 – 1:45	Git & GitHub
-1:45 – 2:00	Push Project to GitHub
-2:00 – 2:20	SQLite → PostgreSQL
-2:20 – 2:50	Deploy Django Application to Render
-2:50 – 3:00	Testing, Challenge & Final Recap
+By the end of this session, you should be able to:
 
-Tip: Do not worry if your code is not identical to the instructor's code at every step. The important thing is understanding what each part does.
+* Explain what authentication is and why the application needs it
+* Explain Django's built-in `User` model and auth system
+* Implement user registration
+* Implement login and logout
+* Protect views using `@login_required`
+* Create authentication templates
+* Redirect users correctly after login, logout, and registration
+* Use `git init`, `git add`, `git commit`, `git push`
+* Write a correct `.gitignore` for a Django project
+* Explain why secrets should never be committed to GitHub
+* Explain why the workshop uses SQLite locally but PostgreSQL in production
+* Install and understand `psycopg2-binary` and `dj-database-url`
+* Configure `DATABASES` using an environment variable
+* Run migrations against a production database
+* Explain why we do **not** copy local SQLite data into production
+* Explain the Render deployment architecture
+* Deploy a Django project to Render
+* Configure Render environment variables
+* Create a production superuser
+* Test a live, deployed CRUD application
 
-🔄 Quick Recap from Session 2
+---
 
-In Session 2, we changed our application from a static application into a database-backed application.
+# ⏱️ Suggested 3-Hour Workshop Plan
 
-The basic flow became:
+| Time        | Part   | Topic                                              |
+| ----------- | ------ | --------------------------------------------------- |
+| 0:00 – 0:15 | Recap  | Session 2 recap + Session 3 roadmap                 |
+| 0:15 – 0:55 | Part 1 | Authentication (register, login, logout, protect)   |
+| 0:55 – 1:15 | Part 2 | Git & GitHub                                        |
+| 1:15 – 1:20 | —      | Break                                                |
+| 1:20 – 1:50 | Part 3 | SQLite → PostgreSQL, environment variables, settings |
+| 1:50 – 2:35 | Part 4 | Render: PostgreSQL, Web Service, deploy, migrate     |
+| 2:35 – 2:50 | —      | Final testing on the live application                |
+| 2:50 – 3:00 | —      | Challenge + wrap-up                                  |
 
-Browser
+> **Tip:** Deployment can occasionally be slow or fail because of a typo in an environment variable, not because of your code. Don't panic — the Troubleshooting section near the end covers the most common issues.
+
+> **Fallback:** If your deployment gets stuck during the workshop, keep working on your local Postgres/settings configuration and follow along as the instructor demonstrates the Render steps on the shared screen. You can redeploy after the session using this README.
+
+---
+
+# 🔄 Quick Recap From Session 2
+
+At the end of Session 2, your project supports:
+
+* ✅ `Student` model (`name`, `email`, `phone`, `faculty`, `semester`, `created_at`)
+* ✅ SQLite database (`db.sqlite3`)
+* ✅ Django Admin with the `Student` model registered
+* ✅ `StudentForm` (`ModelForm`)
+* ✅ Full CRUD: `student_list`, `student_create`, `student_update`, `student_delete`
+* ✅ Templates: `student_list.html`, `student_form.html`, `student_confirm_delete.html`
+
+Your project currently looks like this:
+
+```text
+student-management/
+│
+├── manage.py
+├── db.sqlite3
+│
+├── config/
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── students/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── urls.py
+│   ├── views.py
+│   │
+│   ├── migrations/
+│   │   ├── __init__.py
+│   │   └── 0001_initial.py
+│   │
+│   └── templates/
+│       └── students/
+│           ├── student_list.html
+│           ├── student_form.html
+│           └── student_confirm_delete.html
+│
+└── templates/
+    └── base.html
+```
+
+There is one problem: **anyone** who visits `/students/` can view, create, edit, or delete student records. There is no concept of a logged-in user yet. We fix that first.
+
+---
+
+# PART 1 — AUTHENTICATION
+
+# 🔐 1. What Is Authentication?
+
+**Authentication** is the process of confirming who a user is — usually with a username and password.
+
+This is different from **authorization**, which decides what an authenticated user is *allowed* to do. This workshop only needs authentication: a user is either logged in or not.
+
+```text
+Visitor
    ↓
-URL
+Registration
    ↓
-View
+Account Created
    ↓
-Model / ORM
-   ↓
-SQLite Database
-   ↓
-View
-   ↓
-Template
-   ↓
-Browser
-
-For CRUD operations, the flow became:
-
-Browser
-   ↓
-Form
-   ↓
-POST
-   ↓
-View
-   ↓
-ModelForm
-   ↓
-Validation
-   ↓
-Database
-
-Our Student model contains:
-
-Student
- ├── name
- ├── email
- ├── phone
- ├── faculty
- ├── semester
- └── created_at
-
-And we already have:
-
-Create
-Read
-Update
-Delete
-
-Now we need to control who can access these operations.
-
-🔐 1. What Is Authentication?
-
-Authentication answers a simple question:
-
-Who are you?
-
-For example:
-
-Username
-Password
-
-The application checks those credentials and determines whether the user is authenticated.
-
-The basic flow is:
-
-User
-  ↓
 Login
-  ↓
-Authentication
-  ↓
+   ↓
 Authenticated User
-  ↓
-Student Management System
-👤 2. Django's Built-in Authentication
-
-Django already provides an authentication system.
-
-It includes functionality for:
-
-Users
-Passwords
-Login
+   ↓
+Student Management
+   ↓
 Logout
-Sessions
-Authentication checks
+```
 
-Django already includes:
+---
 
-django.contrib.auth
+# 🤔 2. Why Does the Student Management System Need Authentication?
 
-We will use Django's built-in User model for this workshop.
+Right now, `/students/` is public. Anyone with the URL can delete every student record.
 
-We are keeping authentication simple. We are not introducing custom user models, OAuth, social login, JWT, or role-based authentication in this session.
+A real Student Management System should only allow **staff members who are logged in** to view and manage student records. That is exactly what we are adding today.
 
-📝 3. Create a Registration View
+---
 
-We want users to be able to create an account.
+# 👤 3. Django's Built-In `User` System
 
-The flow will be:
+Django ships with a complete authentication system out of the box, including:
 
-/register/
-      ↓
-Registration Form
-      ↓
-Create User
-      ↓
-Login
-      ↓
-Student List
+* A `User` model (`django.contrib.auth.models.User`)
+* Password hashing (you never store plain-text passwords)
+* Login/logout session handling
+* Built-in forms (`UserCreationForm`, `AuthenticationForm`)
+* Built-in views (`LoginView`, `LogoutView`)
+* The `@login_required` decorator
 
-Open:
+`django.contrib.auth` is already in your `INSTALLED_APPS` from Session 1 — you do not need to add anything there.
 
-students/views.py
+We will use Django's default `User` model exactly as-is. We are **not** creating a custom user model, and we are **not** adding OAuth, social login, JWTs, or role-based permissions — those are outside the scope of this workshop.
 
-Add:
+---
 
+# 🧩 4. Authentication Plan
+
+We will add:
+
+| Feature      | URL         | View                    | Template                       |
+| ------------ | ----------- | ------------------------ | ------------------------------- |
+| Registration | `/register/`| `students.views.register`| `registration/register.html`    |
+| Login        | `/login/`   | Django's `LoginView`     | `registration/login.html`       |
+| Logout       | `/logout/`  | Django's `LogoutView`    | — (redirects, no template needed) |
+
+We will protect these existing views with `@login_required`:
+
+```text
+student_list
+student_create
+student_update
+student_delete
+```
+
+`home` and `about` will stay public — there is nothing sensitive on those pages.
+
+---
+
+# 📁 5. Create the Registration Form Template Folder
+
+Django's built-in `LoginView` looks for a template at `registration/login.html` by default. Create the folder now:
+
+```text
+templates/
+└── registration/
+```
+
+We'll place both `login.html` and `register.html` inside this folder, alongside the existing `base.html`.
+
+---
+
+# ✍️ 6. Add the `register` View
+
+**File:** `students/views.py` — **MODIFIED**
+
+Add these imports to the top of the file, alongside your existing ones:
+
+```python
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+```
 
-Then add:
+Then add the registration view:
 
+```python
 def register(request):
 
     if request.method == "POST":
-
         form = UserCreationForm(request.POST)
 
         if form.is_valid():
-
-            user = form.save()
-
-            login(request, user)
-
-            return redirect("student-list")
+            form.save()
+            return redirect("login")
 
     else:
-
         form = UserCreationForm()
 
     return render(
         request,
-        "students/register.html",
+        "registration/register.html",
         {"form": form}
     )
-🧠 Understanding the Registration View
+```
 
-When the user submits the registration form:
+**What changed:** A new `register` view was added.
 
-POST Request
-     ↓
-UserCreationForm
-     ↓
-Validation
-     ↓
-Create User
-     ↓
-Login User
-     ↓
-Student List
+**Why:** Django does not provide a built-in *registration* view — only login/logout. `UserCreationForm` is a built-in `ModelForm` for the `User` model that handles username, password, and password confirmation, including hashing the password correctly.
 
-The important line:
+**How it works:** On `GET`, an empty form is shown. On `POST`, if the submitted username/password pair is valid, a new `User` is created and the visitor is redirected to the login page.
 
-user = form.save()
+**How to test it:** We'll test this after the URL and template are in place, later in this section.
 
-creates the user.
+---
 
-Then:
+# 🔗 7. Add the Registration URL
 
-login(request, user)
+**File:** `students/urls.py` — **MODIFIED**
 
-logs the user into the current session.
+Add the new path:
 
-📄 4. Create the Registration Template
+```python
+path("register/", views.register, name="register"),
+```
 
-Create:
+Your full file should now look like:
 
-students/templates/students/register.html
+```python
+from django.urls import path
+from . import views
 
-Add:
 
-{% extends "base.html" %}
+urlpatterns = [
+    path("", views.home, name="home"),
+    path("about/", views.about, name="about"),
 
-{% block title %}
-Register - Student Management System
-{% endblock %}
+    path("students/", views.student_list, name="student-list"),
+    path("students/create/", views.student_create, name="student-create"),
+    path(
+        "students/<int:student_id>/edit/",
+        views.student_update,
+        name="student-update"
+    ),
+    path(
+        "students/<int:student_id>/delete/",
+        views.student_delete,
+        name="student-delete"
+    ),
 
-{% block content %}
+    path("register/", views.register, name="register"),
+]
+```
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
+> **Note:** Use your actual existing paths for `student-list`, `student-create`, `student-update`, and `student-delete` from Session 2 — only the `register` line is new. The layout above assumes your Session 2 `students/urls.py` nested student paths under `students/`; if your version kept them at the root (`""`, `"create/"`, `"<int:student_id>/edit/"`), keep that structure and simply add the `register` line.
 
-        <h2 class="mb-4">Create Account</h2>
+---
 
-        <form method="POST">
+# 🔗 8. Add Login and Logout URLs
 
-            {% csrf_token %}
+Rather than writing login/logout views by hand, we use Django's built-in ones directly in the project-level URLs.
 
-            {{ form.as_p }}
+**File:** `config/urls.py` — **MODIFIED**
 
-            <button
-                type="submit"
-                class="btn btn-primary"
-            >
-                Register
-            </button>
-
-        </form>
-
-        <p class="mt-3">
-            Already have an account?
-            <a href="{% url 'login' %}">
-                Login
-            </a>
-        </p>
-
-    </div>
-</div>
-
-{% endblock %}
-
-Notice that we are still using the same template inheritance structure from the previous sessions:
-
-base.html
-    ↓
-register.html
-🔗 5. Add the Registration URL
-
-Open:
-
-students/urls.py
-
-Add:
-
-path(
-    "register/",
-    views.register,
-    name="register"
-),
-
-The URL becomes:
-
-/register/
-
-Test it:
-
-http://127.0.0.1:8000/register/
-
-Create a test account.
-
-🔑 6. Add Login
-
-Django already provides a login view.
-
-We do not need to manually implement password checking.
-
-Open:
-
-students/urls.py
-
-Add:
-
+```python
+from django.contrib import admin
+from django.urls import include, path
 from django.contrib.auth import views as auth_views
 
-Then add:
 
-path(
-    "login/",
-    auth_views.LoginView.as_view(
-        template_name="students/login.html"
+urlpatterns = [
+    path("admin/", admin.site.urls),
+
+    path(
+        "login/",
+        auth_views.LoginView.as_view(template_name="registration/login.html"),
+        name="login"
     ),
-    name="login"
-),
-📄 7. Create the Login Template
+    path(
+        "logout/",
+        auth_views.LogoutView.as_view(),
+        name="logout"
+    ),
 
-Create:
+    path("", include("students.urls")),
+]
+```
 
-students/templates/students/login.html
+**What changed:** Two new paths, `login/` and `logout/`, using Django's built-in `LoginView` and `LogoutView`.
 
-Add:
+**Why:** Django already implements login and logout correctly — including session handling and CSRF protection — so we reuse it instead of writing it ourselves.
 
+**How it works:** `LoginView` renders `registration/login.html` and, on a valid `POST`, logs the user in. `LogoutView` logs the user out and redirects them (we configure where, in the next step).
+
+**How to test it:** Visit `http://127.0.0.1:8000/login/` after the template is created (next section).
+
+---
+
+# ⚙️ 9. Configure Redirect Settings
+
+**File:** `config/settings.py` — **MODIFIED**
+
+Add these three settings anywhere below `INSTALLED_APPS` (a good spot is near the bottom of the file):
+
+```python
+LOGIN_URL = "login"
+LOGIN_REDIRECT_URL = "student-list"
+LOGOUT_REDIRECT_URL = "home"
+```
+
+**What changed:** Three new settings were added.
+
+**Why:**
+* `LOGIN_URL` tells `@login_required` where to send an unauthenticated visitor.
+* `LOGIN_REDIRECT_URL` tells Django where to send a user right after a successful login.
+* `LOGOUT_REDIRECT_URL` tells Django where to send a user right after logging out.
+
+**How it works:** These are just named URL patterns — Django looks them up with `reverse()` internally, the same mechanism behind `{% url %}`.
+
+**How to test it:** Log in and confirm you land on the students page; log out and confirm you land on the home page.
+
+---
+
+# 🖼️ 10. Create the Login Template
+
+**File:** `templates/registration/login.html` — **NEW**
+
+```html
 {% extends "base.html" %}
 
 {% block title %}
@@ -411,9 +419,10 @@ Login - Student Management System
 {% block content %}
 
 <div class="row justify-content-center">
-    <div class="col-md-6">
 
-        <h2 class="mb-4">Login</h2>
+    <div class="col-md-5">
+
+        <h1 class="mb-4">Login</h1>
 
         <form method="POST">
 
@@ -421,10 +430,7 @@ Login - Student Management System
 
             {{ form.as_p }}
 
-            <button
-                type="submit"
-                class="btn btn-primary"
-            >
+            <button type="submit" class="btn btn-primary">
                 Login
             </button>
 
@@ -432,92 +438,98 @@ Login - Student Management System
 
         <p class="mt-3">
             Don't have an account?
-            <a href="{% url 'register' %}">
-                Register
-            </a>
+            <a href="{% url 'register' %}">Register here</a>
         </p>
 
     </div>
+
 </div>
 
 {% endblock %}
-↪️ 8. Configure Login Redirect
+```
 
-Open:
+**Why:** `LoginView` automatically passes a login `form` (Django's `AuthenticationForm`) into this template's context — we just need to render it, exactly like we render `StudentForm` in `student_form.html`.
 
-config/settings.py
+---
 
-Add:
+# 🖼️ 11. Create the Registration Template
 
-LOGIN_REDIRECT_URL = "/students/"
-LOGOUT_REDIRECT_URL = "/"
+**File:** `templates/registration/register.html` — **NEW**
 
-This means:
+```html
+{% extends "base.html" %}
 
-Successful Login
-       ↓
-/students/
+{% block title %}
+Register - Student Management System
+{% endblock %}
 
-and:
+{% block content %}
 
-Logout
-   ↓
-/
-🚪 9. Add Logout
+<div class="row justify-content-center">
 
-We can use Django's built-in logout view.
+    <div class="col-md-5">
 
-Open:
+        <h1 class="mb-4">Register</h1>
 
-students/urls.py
+        <form method="POST">
 
-Add:
+            {% csrf_token %}
 
-path(
-    "logout/",
-    auth_views.LogoutView.as_view(),
-    name="logout"
-),
+            {{ form.as_p }}
 
-The URL becomes:
+            <button type="submit" class="btn btn-primary">
+                Create Account
+            </button>
 
-/logout/
-🛡️ 10. Protect the Student Pages
+        </form>
 
-This is one of the most important concepts in this session.
+        <p class="mt-3">
+            Already have an account?
+            <a href="{% url 'login' %}">Login here</a>
+        </p>
 
-Currently:
+    </div>
 
-Anyone
-   ↓
-/students/
-   ↓
-Student Records
+</div>
 
-We want:
+{% endblock %}
+```
 
-Anonymous User
-      ↓
-/students/
-      ↓
-Login Required
-      ↓
-/login/
-🔒 11. Use login_required
+**How to test both templates:**
 
-Open:
+1. Start the server: `python manage.py runserver`
+2. Visit `http://127.0.0.1:8000/register/`
+3. Create a test account
+4. You should be redirected to `/login/`
+5. Log in with that account
+6. You should be redirected to `/students/` (currently still unprotected — we fix that next)
 
-students/views.py
+---
 
-Add:
+# 🔒 12. Protect the Student Pages With `@login_required`
 
+**File:** `students/views.py` — **MODIFIED**
+
+Add `@login_required` directly above each of the four student-management views. Your file should now look like:
+
+```python
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from .models import Student
+from .forms import StudentForm
 
-Then protect the student list:
+
+def home(request):
+    return render(request, "home.html")
+
+
+def about(request):
+    return render(request, "about.html")
+
 
 @login_required
 def student_list(request):
-
     students = Student.objects.all()
 
     return render(
@@ -526,1041 +538,1042 @@ def student_list(request):
         {"students": students}
     )
 
-If an unauthenticated user visits the page, Django redirects them to the login page.
-
-🧩 12. Protect All CRUD Operations
-
-The Student Management System should not allow anonymous users to create, update or delete student records.
-
-Add:
-
-@login_required
-
-to:
-
-student_list
-student_create
-student_update
-student_delete
-
-For example:
 
 @login_required
 def student_create(request):
-    ...
+
+    if request.method == "POST":
+        form = StudentForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("student-list")
+
+    else:
+        form = StudentForm()
+
+    return render(
+        request,
+        "students/student_form.html",
+        {"form": form}
+    )
+
+
 @login_required
 def student_update(request, student_id):
-    ...
+
+    student = get_object_or_404(Student, id=student_id)
+
+    if request.method == "POST":
+        form = StudentForm(request.POST, instance=student)
+
+        if form.is_valid():
+            form.save()
+            return redirect("student-list")
+
+    else:
+        form = StudentForm(instance=student)
+
+    return render(
+        request,
+        "students/student_form.html",
+        {"form": form}
+    )
+
+
 @login_required
 def student_delete(request, student_id):
-    ...
 
-Our application now works like:
+    student = get_object_or_404(Student, id=student_id)
 
-                    Student Management System
+    if request.method == "POST":
+        student.delete()
+        return redirect("student-list")
 
-                             │
-                             ↓
-                        Is logged in?
-                        /          \
-                      No            Yes
-                      ↓              ↓
-                   Login         Student CRUD
-                                   │
-                       ┌───────────┼───────────┐
-                       ↓           ↓           ↓
-                     Create       Edit       Delete
-🧭 13. Update the Navigation Bar
+    return render(
+        request,
+        "students/student_confirm_delete.html",
+        {"student": student}
+    )
 
-Open:
 
-templates/base.html
+def register(request):
 
-We want the navigation to change depending on whether the user is logged in.
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
 
-Add the following inside the navigation area:
+        if form.is_valid():
+            form.save()
+            return redirect("login")
 
-{% if user.is_authenticated %}
+    else:
+        form = UserCreationForm()
 
-    <span class="text-white me-3">
-        Hello, {{ user.username }}
-    </span>
+    return render(
+        request,
+        "registration/register.html",
+        {"form": form}
+    )
+```
 
-    <a
-        href="{% url 'logout' %}"
-        class="btn btn-outline-light"
-    >
-        Logout
+**What changed:** `@login_required` was added above `student_list`, `student_create`, `student_update`, and `student_delete`.
+
+**Why:** This is the actual protection step. Without it, anyone could still reach `/students/` directly by typing the URL.
+
+**How it works:** `@login_required` checks `request.user.is_authenticated`. If the visitor is not logged in, Django redirects them to `LOGIN_URL` (which we set to `"login"`), and after a successful login, `LOGIN_REDIRECT_URL` sends them back.
+
+**How to test it:**
+
+1. Log out
+2. Try visiting `http://127.0.0.1:8000/students/` directly
+3. You should be redirected to `/login/?next=/students/`
+4. Log in — you should land back on `/students/`
+
+---
+
+# 🧭 13. Update the Navigation Bar
+
+**File:** `templates/base.html` — **MODIFIED**
+
+Update the navbar's link section to show different links depending on whether the visitor is logged in:
+
+```html
+<div>
+
+    <a class="btn btn-outline-light me-2" href="{% url 'home' %}">
+        Home
     </a>
 
-{% else %}
-
-    <a
-        href="{% url 'login' %}"
-        class="btn btn-outline-light me-2"
-    >
-        Login
+    <a class="btn btn-outline-light me-2" href="{% url 'about' %}">
+        About
     </a>
 
-    <a
-        href="{% url 'register' %}"
-        class="btn btn-primary"
-    >
-        Register
-    </a>
+    {% if user.is_authenticated %}
 
-{% endif %}
+        <a class="btn btn-outline-light me-2" href="{% url 'student-list' %}">
+            Students
+        </a>
 
-Now:
+        <form method="POST" action="{% url 'logout' %}" class="d-inline">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-light">
+                Logout ({{ user.username }})
+            </button>
+        </form>
 
-Not Logged In
-     ↓
-Login | Register
+    {% else %}
 
-and:
+        <a class="btn btn-outline-light me-2" href="{% url 'login' %}">
+            Login
+        </a>
 
-Logged In
-     ↓
-Hello, username | Logout
-🧪 14. Test Authentication
+        <a class="btn btn-outline-light" href="{% url 'register' %}">
+            Register
+        </a>
 
-Start the server:
+    {% endif %}
 
-python manage.py runserver
-Test Registration
+</div>
+```
 
-Open:
+**What changed:** The "Students" link and a "Logout" button now only appear for logged-in users. Logged-out visitors see "Login" and "Register" instead.
 
+**Why:** There is no point showing a link to a page the visitor will just get redirected away from. This also gives a clear visual signal of whether you are logged in.
+
+**How it works:** `{% if user.is_authenticated %}` uses Django's `auth` context processor (already enabled in your `TEMPLATES` setting from Session 1), which makes `user` available in every template automatically. Logout is submitted as a `POST` form rather than a plain link — Django's `LogoutView` only accepts `POST` by default, which also prevents a page prefetcher or crawler from accidentally logging someone out.
+
+**How to test it:** Log in and out and confirm the navbar changes correctly each time.
+
+---
+
+# ✅ 14. Authentication — What We Just Built
+
+```text
+Visitor
+   ↓
 /register/
-
-Create a new account.
-
-Expected:
-
-Registration
-     ↓
-Account Created
-     ↓
-Automatically Logged In
-     ↓
-/students/
-Test Logout
-
-Click:
-
-Logout
-
-Expected:
-
-Logout
    ↓
-Homepage
-Test Protected Page
-
-After logout, visit:
-
-/students/
-
-Expected:
-
-/students/
-      ↓
-Not Authenticated
-      ↓
+UserCreationForm
+   ↓
+User created
+   ↓
 /login/
-Test Login
-
-Log in again.
-
-Expected:
-
-Login
-  ↓
-/students/
-  ↓
-Student CRUD Available
-📦 15. What Is Git?
-
-Our project is becoming larger.
-
-We need a way to track changes.
-
-Git is a version control system.
-
-It allows us to:
-
-Track changes
-Save versions of the project
-See project history
-Return to previous versions
-
-Think of it as:
-
-Project
    ↓
-Git
+AuthenticationForm
    ↓
-Commits
+Session created
    ↓
-Project History
-🌐 16. Git vs GitHub
+/students/ (protected by @login_required)
+   ↓
+/logout/
+   ↓
+Session ended
+```
 
-Git and GitHub are not the same thing.
+At this point, run through the full local checklist before moving on:
 
-Git
+* [ ] Can register a new account
+* [ ] Can log in with that account
+* [ ] `/students/` redirects to `/login/` when logged out
+* [ ] `/students/` works normally when logged in
+* [ ] Create / Update / Delete still work while logged in
+* [ ] Logout works and redirects to Home
+* [ ] Navbar shows the correct links in both states
 
-A version-control system running on our computer.
+---
 
-GitHub
+# PART 2 — GIT & GITHUB
 
-An online platform for storing and collaborating on Git repositories.
+# 🌱 15. Why Git and GitHub?
 
-The relationship is:
+Right now, your project only exists on your own computer. Render (and any deployment platform) needs a way to get a copy of your code — that's what GitHub is for.
 
-Git
- ↓
-Local Repository
- ↓
-GitHub
- ↓
-Remote Repository
-🛠️ 17. Initialize Git
-
-From the project root:
-
+```text
+Local Project
+   ↓
 git init
+   ↓
+git add
+   ↓
+git commit
+   ↓
+GitHub Repository
+   ↓
+git push
+   ↓
+Render
+```
 
-Check the repository:
+We only cover the Git commands needed for this workflow — no branching, pull requests, or GitHub Actions today.
 
+---
+
+# 🔍 16. Check if Git Is Already Set Up
+
+If you completed the *optional* Git setup at the end of Session 1, you already have a local repository. Check:
+
+```bash
 git status
+```
 
-You should now have a Git repository for the project.
+* If you see `fatal: not a git repository`, continue to step 17.
+* If you see a list of tracked/untracked files instead, skip to step 19 — you already have a repo and a `.gitignore`.
 
-🚫 18. Create .gitignore
+---
 
-We should not commit files that should remain local.
+# 🌱 17. Initialize the Repository
 
-Create:
+If you don't already have one:
 
-.gitignore
+```bash
+git init
+```
 
-Add:
+**What this does:** Creates a hidden `.git/` folder that turns your project directory into a Git repository capable of tracking changes.
 
-.venv/
-venv/
+---
+
+# 📄 18. Create `.gitignore`
+
+**File:** `.gitignore` — **NEW** (or already exists from Session 1)
+
+```gitignore
+# Python
 __pycache__/
 *.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+
+# Django
 db.sqlite3
+
+# Environment variables
 .env
-Why ignore db.sqlite3?
 
-Because this is our local development database.
+# Static files (collected in production)
+staticfiles/
 
-We will use PostgreSQL for the deployed application.
+# IDE
+.vscode/
+.idea/
 
-Why ignore .env?
+# Operating system files
+.DS_Store
+Thumbs.db
+```
 
-Environment files may contain secrets such as:
+**Why this matters — this is critical:** Your repository must **never** contain:
 
-SECRET_KEY
-DATABASE_URL
+```text
+venv/            → huge, machine-specific, easy to regenerate
+.env              → contains secrets
+db.sqlite3        → your local database file, may contain test data
+secrets/keys      → should never exist in the repo at all
+```
 
-These should not be uploaded to GitHub.
+If secrets or credentials get committed to a public GitHub repository, anyone can read them — including automated bots that scan GitHub for leaked keys within seconds of a push. Environment variables exist specifically so secrets live only on your machine and on Render's servers, never in your source code.
 
-💾 19. Create a Git Commit
+---
 
-Check the files:
+# 📦 19. Stage and Commit Your Changes
 
+Check what Git sees:
+
+```bash
 git status
+```
 
-Add them:
+Stage everything (respecting `.gitignore`):
 
+```bash
 git add .
-
-Create a commit:
-
-git commit -m "Complete authentication"
-
-Check the history:
-
-git log --oneline
-🐙 20. Create a GitHub Repository
-
-Create a new repository on GitHub.
-
-Suggested name:
-
-student-management-system
-
-If your local project already contains a README, do not create another README during repository creation.
-
-Connect your local repository:
-
-git remote add origin YOUR_GITHUB_REPOSITORY_URL
-
-Check:
-
-git remote -v
-
-Push the project:
-
-git branch -M main
-git push -u origin main
-
-After pushing, open the GitHub repository and verify that your project files are visible.
-
-🗄️ 21. SQLite and Production
-
-In Session 2, we used SQLite:
-
-Django
-  ↓
-SQLite
-  ↓
-db.sqlite3
-
-SQLite is excellent for learning because:
-
-No separate database server is required
-Django supports it by default
-The database is stored in a single file
-It is simple to set up
-It is excellent for small projects and workshops
-
-However, when we deploy the application, we want a proper persistent production database.
-
-We will use:
-
-Django
-  ↓
-PostgreSQL
-🔄 22. SQLite → PostgreSQL
-
-We are not changing our Student model.
-
-The model remains:
-
-Student
- ├── name
- ├── email
- ├── phone
- ├── faculty
- ├── semester
- └── created_at
-
-Only the database changes.
-
-Before:
-
-Django
-   ↓
-SQLite
-   ↓
-db.sqlite3
-
-After deployment:
-
-Django
-   ↓
-PostgreSQL
-   ↓
-Render Database
-
-The Django ORM continues to work with our existing model.
-
-📦 23. Install Production Dependencies
-
-Activate your virtual environment.
-
-Install:
-
-pip install psycopg2-binary
-
-Install database URL support:
-
-pip install dj-database-url
-
-Install WhiteNoise for static files:
-
-pip install whitenoise
-
-Install Gunicorn:
-
-pip install gunicorn
-
-Save the dependencies:
-
-pip freeze > requirements.txt
-🔐 24. Environment Variables
-
-We should not put production secrets directly into our source code.
-
-For example:
-
-SECRET_KEY
-DATABASE_URL
-
-should be provided through environment variables.
-
-The production architecture becomes:
-
-GitHub
-   │
-   │ Source Code
-   ↓
-Render
-   │
-   ├── SECRET_KEY
-   │
-   └── DATABASE_URL
-          │
-          ↓
-      PostgreSQL
-⚙️ 25. Configure the Database
-
-Open:
-
-config/settings.py
-
-Add:
-
-import os
-import dj_database_url
-
-Then configure the database:
-
-DATABASE_URL = os.environ.get("DATABASE_URL")
-
-if DATABASE_URL:
-
-    DATABASES = {
-        "default": dj_database_url.parse(DATABASE_URL)
-    }
-
-else:
-
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-
-Now the application behaves differently depending on the environment.
-
-Local Development
-No DATABASE_URL
-       ↓
-SQLite
-       ↓
-db.sqlite3
-Render
-DATABASE_URL exists
-       ↓
-PostgreSQL
-
-This means we can continue using SQLite locally while the deployed application uses PostgreSQL.
-
-🎨 26. Configure Static Files
-
-Production applications need to collect static files.
-
-Open:
-
-config/settings.py
-
-Add WhiteNoise after Django's security middleware:
-
-MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-
-    # existing middleware...
-]
-
-Configure:
-
-STATIC_URL = "static/"
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
-🔑 27. Configure the Secret Key
-
-We should not hard-code the production secret key.
-
-Use:
-
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY",
-    "django-insecure-development-key"
-)
-
-For production, Render will provide the real secret through an environment variable.
-
-Warning: Never commit a real production secret key to GitHub.
-
-🐞 28. Configure DEBUG
-
-For local development, we normally use:
-
-DEBUG = True
-
-For production, we should disable debug mode.
-
-A simple environment-based configuration is:
-
-DEBUG = os.environ.get(
-    "DEBUG",
-    "False"
-) == "True"
-
-On Render:
-
-DEBUG=False
-📜 29. Create build.sh
-
-Create a new file in the project root:
-
-build.sh
-
-Add:
-
-#!/usr/bin/env bash
-
-set -o errexit
-
-pip install -r requirements.txt
-
-python manage.py collectstatic --no-input
-
-python manage.py migrate
-
-The purpose of the build script is to prepare the application whenever Render deploys it.
-
-The process is:
-
-Install Dependencies
-        ↓
-Collect Static Files
-        ↓
-Run Migrations
-        ↓
-Start Application
-🧪 30. Test Before Deployment
-
-Before deploying, test the project locally.
-
-Run:
-
-python manage.py check
-
-Then:
-
-python manage.py collectstatic
-
-Then:
-
-python manage.py migrate
-
-Finally:
-
-python manage.py runserver
-
-Test:
-
-/register/
-/login/
-/logout/
-/students/
-
-Make sure authentication and CRUD still work.
-
-Tip: Fix local errors before deploying. Deployment is much easier when the project already works correctly on your computer.
-
-💾 31. Commit Deployment Changes
-
-Check:
-
-git status
-
-Add:
-
-git add .
+```
 
 Commit:
 
-git commit -m "Prepare project for deployment"
+```bash
+git commit -m "Add authentication to Student Management System"
+```
 
-Push:
+**What this does:** `git add .` stages all changed/new files except the ones excluded by `.gitignore`. `git commit` saves a permanent snapshot of the staged files with a message describing the change.
 
+---
+
+# 🌐 20. Create a GitHub Repository
+
+1. Go to [github.com](https://github.com) and log in
+2. Click **New repository**
+3. Name it, for example: `student-management`
+4. Leave it **empty** (no README, no `.gitignore`, no license — you already have these locally)
+5. Click **Create repository**
+
+GitHub will show you a remote URL that looks like:
+
+```text
+https://github.com/your-username/student-management.git
+```
+
+---
+
+# 🔗 21. Connect Your Local Repository to GitHub
+
+```bash
+git remote add origin https://github.com/your-username/student-management.git
+```
+
+**What this does:** Registers the GitHub URL under the name `origin`, so Git knows where to push your commits.
+
+If you already added a remote earlier and need to change it:
+
+```bash
+git remote set-url origin https://github.com/your-username/student-management.git
+```
+
+---
+
+# 🚀 22. Push to GitHub
+
+```bash
+git branch -M main
+git push -u origin main
+```
+
+**What this does:** `git branch -M main` makes sure your default branch is named `main`. `git push -u origin main` uploads your commits to GitHub and remembers `origin main` as the default target for future pushes.
+
+**How to test it:** Refresh your GitHub repository page in the browser — your files should now be visible there. Confirm that `db.sqlite3`, `venv/`, and `.env` are **not** in the file list.
+
+From now on, after any further change:
+
+```bash
+git add .
+git commit -m "Describe what changed"
 git push
+```
 
-Your GitHub repository should now contain the deployment-ready project.
+---
 
-🌐 32. Deploy to Render
+# PART 3 — PRODUCTION PREPARATION
 
-For deployment, our architecture will be:
+# 🗄️ 23. SQLite vs. PostgreSQL
 
-GitHub
-   │
-   ↓
-Render Web Service
-   │
-   ↓
-Django Application
-   │
-   ↓
-Render PostgreSQL
+We used SQLite during local development because it's convenient — no separate server, no setup, just a single file.
 
-We will create two production resources:
+For our deployed application, we will use **PostgreSQL** instead.
 
-1. Render Web Service
-2. Render PostgreSQL Database
-🗄️ 33. Create a PostgreSQL Database
+```text
+Local Development
 
-In Render:
-
-Create a new PostgreSQL database.
-Give the database a name.
-Wait until the database is available.
-Use the database connection URL for the web service.
-
-The important relationship is:
-
-Render PostgreSQL
-       ↓
-DATABASE_URL
-       ↓
 Django
-🌐 34. Create the Render Web Service
-
-In Render:
-
-Create a new Web Service.
-Connect your GitHub account.
-Select your repository:
-student-management-system
-Select the appropriate Python environment.
-Configure the build command:
-./build.sh
-Configure the start command:
-python -m gunicorn config.asgi:application -k uvicorn.workers.UvicornWorker
-🔐 35. Add Environment Variables
-
-In the Render service settings, add:
-
-SECRET_KEY
-DATABASE_URL
-
-You may also configure:
-
-DEBUG=False
-
-For:
-
-DATABASE_URL
-
-use the PostgreSQL connection URL provided by your Render database.
-
-The production environment becomes:
-
-Render
-  │
-  ├── Django
-  │
-  ├── SECRET_KEY
-  │
-  ├── DATABASE_URL
-  │
-  └── PostgreSQL
-🚀 36. Deploy the Application
-
-Click:
-
-Deploy
-
-Render will perform approximately this process:
-
-GitHub Repository
-        ↓
-Clone Project
-        ↓
-Install Dependencies
-        ↓
-Run build.sh
-        ↓
-Collect Static Files
-        ↓
-Run Migrations
-        ↓
-Start Gunicorn
-        ↓
-Live Application
-
-Wait until the deployment finishes successfully.
-
-👑 37. Create the Production Superuser
-
-There is an important difference between our local and production databases.
-
-Our local superuser exists in:
-
-Local SQLite
-
-The production application uses:
-
-Production PostgreSQL
-
-Therefore, the local superuser does not automatically exist in the production database.
-
-Open the Render Shell and run:
-
-python manage.py createsuperuser
-
-Follow the prompts.
-
-Now you can access:
-
-/admin/
-
-using the production superuser.
-
-🧪 38. Test the Live Application
-
-Open the Render URL:
-
-https://your-project.onrender.com/
-
-Test the public pages:
-
-/
-/about/
-
-Test authentication:
-
-/register/
-/login/
-/logout/
-
-Test protected pages:
-
-/students/
-
-Test CRUD:
-
-Create
-Read
-Update
-Delete
-
-Test Admin:
-
-/admin/
-💾 39. Verify PostgreSQL Persistence
-
-Create a student on the live application:
-
-Create Student
-      ↓
-Django
-      ↓
-PostgreSQL
-
-Refresh the page.
-
-The student should still exist.
-
-The final production flow is:
-
-Browser
-   ↓
-Render
-   ↓
-Django
-   ↓
-Django ORM
-   ↓
-PostgreSQL
-   ↓
-Student Data
-
-The local:
-
+  ↓
+SQLite
+  ↓
 db.sqlite3
 
-is no longer responsible for production data.
 
-🧠 40. Understanding the Final Architecture
+Production
 
-Our application has now evolved significantly.
-
-Before Session 2
-Browser
-   ↓
 Django
-   ↓
-Templates
-After Session 2
-Browser
-   ↓
+  ↓
+PostgreSQL
+  ↓
+Render
+```
+
+You do **not** need to learn PostgreSQL administration or SQL for this workshop. You only need to understand the practical transition: SQLite is convenient for local development, PostgreSQL is used for the deployed application, and Django connects to it through a single environment variable — `DATABASE_URL`.
+
+---
+
+# 📦 24. Install Production Database Packages
+
+```bash
+pip install psycopg2-binary dj-database-url gunicorn whitenoise
+```
+
+| Package            | Purpose                                                                 |
+| ------------------- | ------------------------------------------------------------------------ |
+| `psycopg2-binary`   | Lets Django talk to a PostgreSQL database                                |
+| `dj-database-url`   | Converts a single `DATABASE_URL` string into Django's `DATABASES` config |
+| `gunicorn`          | A production web server that actually runs Django on Render              |
+| `whitenoise`        | Serves static files (like the Django Admin's CSS/JS) in production       |
+
+> Django's own development server (`runserver`) is only meant for local development. Render needs a real production server — that's what `gunicorn` provides.
+
+---
+
+# 📝 25. Freeze Your Dependencies
+
+**File:** `requirements.txt` — **NEW** (or **MODIFIED** if it already exists)
+
+```bash
+pip freeze > requirements.txt
+```
+
+Your file should now contain at least:
+
+```text
 Django
-   ↓
-ORM
-   ↓
-SQLite
-After Session 3
-                         Browser
-                            ↓
-                         Render
-                            ↓
-                          Django
-                            ↓
-                  ┌─────────┴─────────┐
-                  ↓                   ↓
-            Authentication         ORM
-                  ↓                   ↓
-                User             PostgreSQL
-                  │                   │
-                  └─────────┬─────────┘
-                            ↓
-                    Student Management
-🧩 41. Session 3 Challenge
-Protect the Student Management System
+psycopg2-binary
+dj-database-url
+gunicorn
+whitenoise
+```
 
-Now implement and test the following yourself.
+(Exact version numbers will also appear — that's expected and fine.)
 
-Requirements
- Anonymous users cannot access /students/
- Anonymous users cannot create students
- Anonymous users cannot update students
- Anonymous users cannot delete students
- Logged-in users can perform CRUD
- The navbar displays the logged-in username
- Logged-in users can logout
- After logout, protected pages require login again
-Hint
+**Why:** Render doesn't have your packages installed. It reads `requirements.txt` and installs exactly what your project needs.
 
-Use:
+---
 
-from django.contrib.auth.decorators import login_required
+# ⚙️ 26. Update `settings.py` for Production
 
-Then:
+We'll make four changes to `config/settings.py`: `SECRET_KEY`, `DEBUG`, `ALLOWED_HOSTS`, and `DATABASES`. Each change keeps working exactly the same locally, and only changes behavior once the matching environment variable is set on Render.
 
-@login_required
-def your_view(request):
-    ...
-Expected Result
+**File:** `config/settings.py` — **MODIFIED**
 
-When not logged in:
+At the very top of the file, make sure `os` is imported and add `dj_database_url`:
 
-/students/
-      ↓
-/login/
+```python
+import os
+from pathlib import Path
+import dj_database_url
+```
 
-When logged in:
+### `SECRET_KEY`
 
-/students/
-      ↓
-Student CRUD
-⚠️ 42. Common Problems
-TemplateDoesNotExist
-
-Example:
-
-TemplateDoesNotExist:
-students/login.html
-
-Make sure the file exists at:
-
-students/templates/students/login.html
-NoReverseMatch
-
-Example:
-
-NoReverseMatch:
-Reverse for 'login' not found
-
-Check that your URL has:
-
-name="login"
-
-For example:
-
-path(
-    "login/",
-    auth_views.LoginView.as_view(
-        template_name="students/login.html"
-    ),
-    name="login"
+```python
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "django-insecure-your-existing-local-key"
 )
-ModuleNotFoundError: dj_database_url
+```
 
-Install:
+**Why:** Locally, nothing changes — the fallback value (your existing key from `startproject`) is used. On Render, we will set a real `SECRET_KEY` environment variable, and that value will be used instead. The production key should never be the same as the one sitting in your GitHub repository.
 
-pip install dj-database-url
+### `DEBUG`
 
-Then:
+```python
+DEBUG = os.environ.get("DEBUG", "True") == "True"
+```
 
-pip freeze > requirements.txt
-ModuleNotFoundError: psycopg2
+**Why:** Locally this defaults to `True` (normal development behavior — detailed error pages). On Render, we will explicitly set `DEBUG=False`, because showing detailed error pages (including parts of your source code) to the public internet is a serious security risk.
 
-Install:
+### `ALLOWED_HOSTS`
 
-pip install psycopg2-binary
+```python
+ALLOWED_HOSTS = []
 
-Then:
+RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+```
 
-pip freeze > requirements.txt
-collectstatic Error
+**Why:** Django refuses requests to hostnames not listed in `ALLOWED_HOSTS`, as a security measure. Render automatically provides the `RENDER_EXTERNAL_HOSTNAME` environment variable for every web service, so this fills itself in correctly without you having to hard-code your Render URL.
 
-Check:
+### `DATABASES`
 
+Find your existing `DATABASES` setting (currently pointing at SQLite) and replace it with:
+
+```python
+DATABASES = {
+    "default": dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
+    )
+}
+```
+
+**Why:** `dj_database_url.config()` looks for a `DATABASE_URL` environment variable. Locally, that variable doesn't exist, so it falls back to your existing SQLite database — your local workflow is completely unaffected. On Render, we will set `DATABASE_URL` to point at a real PostgreSQL database, and Django will connect there automatically, with **no code change required**.
+
+This is exactly why we use an environment variable instead of hard-coding a database connection string: the same code works in two different environments.
+
+---
+
+# 🎨 27. Configure Static Files for Production
+
+Your project uses Bootstrap through a CDN and has no custom CSS/JS files of your own — so there's nothing to configure for *your* templates. However, the **Django Admin** interface does ship its own CSS/JS, and Render's production server does not serve static files automatically the way `runserver` does locally. `whitenoise` handles this for us.
+
+**File:** `config/settings.py` — **MODIFIED**
+
+Add `whitenoise` to `MIDDLEWARE`, directly after `SecurityMiddleware`:
+
+```python
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+```
+
+Add near your other static settings (create this section if it doesn't exist yet):
+
+```python
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+```
 
-and make sure WhiteNoise is installed:
+**Why:** `STATIC_ROOT` is the folder Django collects all static files into for production (via `collectstatic`, covered in the deployment steps). `WhiteNoiseMiddleware` then serves those files directly from your Django process — no separate file server needed, which keeps this beginner-friendly.
 
-pip install whitenoise
-Database Connection Error
+**How to test it locally:**
 
-Check:
+```bash
+python manage.py collectstatic --no-input
+```
 
-DATABASE_URL
+You should see a new `staticfiles/` folder appear (already excluded by `.gitignore`) containing the Django Admin's CSS/JS.
 
-in the Render environment variables.
+---
 
-Make sure it contains the correct PostgreSQL connection URL.
+# 🔄 28. Migrations in Production
 
-DisallowedHost
+After Django connects to PostgreSQL, that database is **completely empty** — it has no tables yet.
 
-Make sure the deployed hostname is allowed by Django's ALLOWED_HOSTS configuration.
+```bash
+python manage.py migrate
+```
 
-🏁 43. Final Session 3 Checklist
-Authentication
- Do I understand authentication?
- Can I register a user?
- Can I log in?
- Can I log out?
- Do I understand user.is_authenticated?
- Can I protect a view with login_required?
- Are the Student CRUD pages protected?
-Git & GitHub
- Do I understand what Git is?
- Do I understand the difference between Git and GitHub?
- Can I initialize a Git repository?
- Do I know why .gitignore is needed?
- Can I create a commit?
- Can I connect a local repository to GitHub?
- Can I push my project to GitHub?
-Deployment
- Do I understand why SQLite is useful locally?
- Do I understand why we use PostgreSQL for production?
- Can I configure DATABASE_URL?
- Do I understand environment variables?
- Can I configure static files?
- Can I create build.sh?
- Can I deploy a Django project to Render?
- Can I run migrations on the production database?
- Can I create a production superuser?
- Can I test the live application?
-💡 The Big Idea
+This creates all the necessary tables (`Student`, Django's built-in `User`/session/auth tables, etc.) inside PostgreSQL, based on your existing migration files. We'll run this against Render's database in Part 4, from the Render Shell.
 
-Don't leave this session thinking:
+> **Important:** We are **not** migrating your local SQLite data into PostgreSQL. Render's PostgreSQL database starts empty. After running migrations there, you'll create a fresh production superuser and fresh student records directly on the live site. This keeps the workshop simple — teaching a SQLite → PostgreSQL data transfer is a separate, more advanced topic.
 
-"I learned some authentication and deployment commands."
-
-Instead, remember the complete journey:
-
-DJANGO
+```text
+Local SQLite
    ↓
-PROJECT
-   ↓
-APP
-   ↓
-URLS
-   ↓
-VIEWS
-   ↓
-TEMPLATES
-   ↓
-DATABASE
-   ↓
-MODELS
-   ↓
-ORM
-   ↓
-CRUD
-   ↓
-AUTHENTICATION
-   ↓
-GIT
-   ↓
-GITHUB
-   ↓
-POSTGRESQL
-   ↓
-RENDER
-   ↓
-LIVE APPLICATION
+Used for learning/testing only
 
-And the production application flow:
+Render PostgreSQL
+   ↓
+Fresh production database
+   ↓
+Run migrations
+   ↓
+Create production superuser
+   ↓
+Create fresh student records
+```
 
-USER
-  ↓
-LOGIN
-  ↓
-AUTHENTICATED USER
-  ↓
-STUDENT CRUD
-  ↓
-DJANGO ORM
-  ↓
-POSTGRESQL
-  ↓
-RENDER
-🎓 Session 3 Complete
+---
 
-You have taken the Student Management System from a local database-backed Django project to a more complete web application with:
+# 💾 29. Commit Your Production Configuration
 
-Authentication
-      ↓
-Git & GitHub
-      ↓
-PostgreSQL
-      ↓
-Deployment
-      ↓
-Live Application
+```bash
+git add .
+git commit -m "Prepare project for production deployment"
+git push
+```
 
-You did not just learn Django commands.
+Your GitHub repository now contains everything Render needs to build and run your application — without a single secret exposed in the code.
 
-You built a project progressively:
+---
 
+# PART 4 — RENDER DEPLOYMENT
+
+# 🏗️ 30. Deployment Architecture
+
+```text
+GitHub
+   ↓
+Render Web Service  ──────  Render PostgreSQL
+   ↓
+Django Application
+   ↓
+🌐 LIVE STUDENT MANAGEMENT SYSTEM
+```
+
+Render will:
+
+1. Pull your code from GitHub
+2. Install dependencies from `requirements.txt`
+3. Run your build command (which also runs `collectstatic`)
+4. Start your app using `gunicorn`
+5. Connect it to a Render-managed PostgreSQL database
+
+---
+
+# 🐘 31. Create the Render PostgreSQL Database
+
+1. Log in at [render.com](https://render.com)
+2. Click **New** → **PostgreSQL**
+3. Give it a name, e.g. `student-management-db`
+4. Choose the free tier (sufficient for this workshop)
+5. Click **Create Database**
+
+Once it's ready, open the database page and find the **Internal Database URL** (or **Connection String**). It looks like:
+
+```text
+postgresql://user:password@host/dbname
+```
+
+Copy it — you'll paste it into your web service's environment variables in the next step.
+
+---
+
+# 🌐 32. Create the Render Web Service
+
+1. Click **New** → **Web Service**
+2. Connect your GitHub account and select your `student-management` repository
+3. Configure:
+
+| Setting        | Value                                                            |
+| -------------- | ----------------------------------------------------------------- |
+| Name           | `student-management` (or any name you like)                       |
+| Runtime        | Python 3                                                           |
+| Build Command  | `pip install -r requirements.txt && python manage.py collectstatic --no-input` |
+| Start Command  | `gunicorn config.wsgi`                                             |
+
+---
+
+# 🔑 33. Configure Environment Variables
+
+In your Web Service's **Environment** tab, add:
+
+| Key                   | Value                                                |
+| ---------------------- | ------------------------------------------------------ |
+| `SECRET_KEY`            | a new random string, e.g. `your-secret-key`             |
+| `DEBUG`                 | `False`                                                 |
+| `DATABASE_URL`          | the Internal Database URL you copied in step 31         |
+
+> Never paste your *actual* secret values into a README, a commit, or a chat message — the values above are placeholders. Generate your own `SECRET_KEY`, for example with:
+> ```bash
+> python -c "import secrets; print(secrets.token_urlsafe(50))"
+> ```
+
+`RENDER_EXTERNAL_HOSTNAME` is provided automatically by Render — you don't need to set it yourself.
+
+---
+
+# 🚀 34. Deploy
+
+Click **Create Web Service** (or **Deploy** if you already created it). Render will:
+
+* Clone your repository
+* Run your build command
+* Start your app with `gunicorn`
+
+Watch the deploy logs. A successful deploy ends with a line indicating `gunicorn` has started and is listening for requests.
+
+---
+
+# 🧱 35. Run Migrations on Render
+
+Open your Web Service's **Shell** tab and run:
+
+```bash
+python manage.py migrate
+```
+
+This creates every table — including the `Student` table and Django's authentication tables — inside your Render PostgreSQL database.
+
+---
+
+# 👑 36. Create a Production Superuser
+
+Still in the Render Shell:
+
+```bash
+python manage.py createsuperuser
+```
+
+Follow the prompts to set a username, email, and password.
+
+> This creates a **brand-new** admin account inside the production PostgreSQL database. Your local SQLite superuser from Session 2 does **not** automatically exist here — you must create one directly on Render.
+
+---
+
+# 🌐 37. Open the Live Application
+
+Render shows your live URL at the top of the Web Service page, something like:
+
+```text
+https://student-management.onrender.com
+```
+
+Open it in your browser.
+
+---
+
+# ✅ 38. Final Testing Checklist
+
+Test every one of these directly on the **live** Render URL:
+
+* [ ] Homepage loads
+* [ ] Registration works
+* [ ] Login works
+* [ ] Logout works
+* [ ] `/students/` redirects to login when logged out
+* [ ] Create student works
+* [ ] Update student works
+* [ ] Delete student works
+* [ ] `/admin/` loads and looks styled correctly (confirms WhiteNoise is serving static files)
+* [ ] Refresh the page after creating a student — the record is still there (confirms PostgreSQL persistence, not an in-memory fluke)
+
+---
+
+# 🔁 39. The Complete Deployment Flow
+
+```text
+Local Django Project
+   ↓
+Git
+   ↓
+GitHub
+   ↓
+Render
+   ↓
+Render PostgreSQL
+   ↓
+Environment Variables
+   ↓
+Migrations
+   ↓
+Production Superuser
+   ↓
+🌐 LIVE APPLICATION
+```
+
+---
+
+# 🏗️ 40. Final Project Structure
+
+```text
+student-management/
+│
+├── .gitignore
+├── requirements.txt
+├── manage.py
+├── db.sqlite3                (local only — never committed)
+│
+├── config/
+│   ├── __init__.py
+│   ├── settings.py           MODIFIED — SECRET_KEY, DEBUG, ALLOWED_HOSTS,
+│   │                          DATABASES, MIDDLEWARE, static config,
+│   │                          LOGIN_URL, LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL
+│   ├── urls.py                MODIFIED — login/ and logout/ paths
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── students/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── models.py
+│   ├── urls.py                MODIFIED — register/ path
+│   ├── views.py               MODIFIED — register view, @login_required
+│   │
+│   ├── migrations/
+│   │   ├── __init__.py
+│   │   └── 0001_initial.py
+│   │
+│   └── templates/
+│       └── students/
+│           ├── student_list.html
+│           ├── student_form.html
+│           └── student_confirm_delete.html
+│
+└── templates/
+    ├── base.html               MODIFIED — auth-aware navbar
+    ├── home.html
+    ├── about.html
+    └── registration/
+        ├── login.html          NEW
+        └── register.html       NEW
+```
+
+---
+
+# 🩺 41. Troubleshooting
+
+## Authentication
+
+### `NoReverseMatch` for `login` or `register`
+
+**Cause:** The URL name doesn't exist yet, or you're using the wrong name in `{% url %}`.
+**Fix:** Confirm `name="login"` exists in `config/urls.py` and `name="register"` exists in `students/urls.py`.
+**Verify:** `{% url 'login' %}` and `{% url 'register' %}` should resolve without errors.
+
+### `TemplateDoesNotExist: registration/login.html`
+
+**Cause:** The `templates/registration/` folder is missing, or the file is misnamed.
+**Fix:** Confirm the file lives at `templates/registration/login.html`, matching Django's default `LoginView` template path exactly.
+**Verify:** Visit `/login/` — the form should render.
+
+### Logging in redirects to the wrong page
+
+**Cause:** `LOGIN_REDIRECT_URL` is missing or points to the wrong URL name.
+**Fix:** Confirm `LOGIN_REDIRECT_URL = "student-list"` is in `settings.py` and that `"student-list"` is a real URL name.
+**Verify:** Log in and confirm you land on `/students/`.
+
+### `@login_required` doesn't redirect at all
+
+**Cause:** The decorator is missing, or it's above the wrong function.
+**Fix:** Double-check the decorator sits directly above `def student_list(request):` (and the other three views) with no blank line issue.
+**Verify:** Log out, visit `/students/`, confirm you're redirected to `/login/?next=/students/`.
+
+## Git & GitHub
+
+### Git doesn't recognize a file you expect it to track
+
+**Cause:** The file is listed in `.gitignore`.
+**Fix:** Check `.gitignore` — if the file genuinely should be tracked, remove the matching line.
+**Verify:** `git status` should show the file.
+
+### `git push` fails with a permissions/authentication error
+
+**Cause:** GitHub no longer accepts password authentication over HTTPS.
+**Fix:** Use a Personal Access Token in place of your password, or set up SSH authentication.
+**Verify:** `git push` completes without an authentication prompt failing.
+
+### `.gitignore` isn't working for a file already tracked
+
+**Cause:** `.gitignore` only affects untracked files — if a file was committed *before* you added it to `.gitignore`, Git keeps tracking it.
+**Fix:**
+```bash
+git rm --cached db.sqlite3
+git commit -m "Stop tracking db.sqlite3"
+```
+**Verify:** `git status` no longer shows changes to that file after editing it locally.
+
+## PostgreSQL / Environment Variables
+
+### `django.db.utils.OperationalError` on Render
+
+**Cause:** `DATABASE_URL` is missing or incorrect on the Web Service.
+**Fix:** Re-check the Environment tab — confirm `DATABASE_URL` exactly matches the Internal Database URL from your Render PostgreSQL instance.
+**Verify:** Redeploy and check the logs for a successful startup.
+
+### Missing environment variable errors
+
+**Cause:** `SECRET_KEY`, `DEBUG`, or `DATABASE_URL` wasn't set on Render.
+**Fix:** Add the missing variable in the Environment tab, then trigger a manual deploy.
+**Verify:** The deploy log shows the app starting cleanly.
+
+### Migration errors on Render
+
+**Cause:** Usually means `DATABASE_URL` isn't connecting correctly yet.
+**Fix:** Confirm the database is fully provisioned (not still spinning up) before running `migrate`.
+**Verify:** `python manage.py migrate` in the Render Shell completes without errors.
+
+## Render Build / Start
+
+### Render build fails
+
+**Cause:** Usually a missing package in `requirements.txt`.
+**Fix:** Run `pip freeze > requirements.txt` again locally and re-commit/push.
+**Verify:** The next Render build log shows all packages installing successfully.
+
+### Render start command fails immediately
+
+**Cause:** Typically `gunicorn config.wsgi` pointing at the wrong module path.
+**Fix:** Confirm your project's config folder is actually named `config` (matches `config/wsgi.py`).
+**Verify:** The deploy log shows `gunicorn` binding to a port and staying running.
+
+### `ALLOWED_HOSTS` error on the live site
+
+**Cause:** `RENDER_EXTERNAL_HOSTNAME` isn't being read correctly, or `ALLOWED_HOSTS` was overwritten instead of appended to.
+**Fix:** Re-check the `ALLOWED_HOSTS` code from step 26 — it must use `.append()`, not `=`.
+**Verify:** Reload the live URL — the "DisallowedHost" error should be gone.
+
+### Static files (Admin CSS) missing/unstyled on the live site
+
+**Cause:** `collectstatic` wasn't run, or `whitenoise` middleware/setting is missing.
+**Fix:** Confirm the build command includes `python manage.py collectstatic --no-input`, and that `WhiteNoiseMiddleware` is in `MIDDLEWARE` directly after `SecurityMiddleware`.
+**Verify:** Reload `/admin/` on the live site — it should look properly styled.
+
+### Admin login works locally but not on the live site
+
+**Cause:** No production superuser has been created yet — the local one only exists in your local SQLite file.
+**Fix:** Run `python manage.py createsuperuser` from the Render Shell.
+**Verify:** Log in at `https://your-app.onrender.com/admin/` with the new credentials.
+
+### Data disappears after a redeploy
+
+**Cause:** This should **not** happen with a proper Render PostgreSQL database — if it does, double check `DATABASE_URL` is actually set (if it's missing, Django silently falls back to a fresh local SQLite file on each new deploy, which does not persist).
+**Fix:** Re-verify the `DATABASE_URL` environment variable.
+**Verify:** Create a student, trigger a manual redeploy from the Render dashboard, and confirm the student is still there afterward.
+
+---
+
+# 🎯 42. Session 3 Challenge
+
+**Problem statement:** Right now, any logged-in user can edit or delete *any* student record — there's no ownership. Add a lightweight safeguard without introducing a whole new authorization system.
+
+**Requirements:**
+
+* Add a `created_by` field to the `Student` model, linked to Django's `User` model
+* Automatically set it to the currently logged-in user when a student is created
+* On the student list page, display who created each record
+
+**Hints:**
+
+```python
+created_by = models.ForeignKey(
+    User,
+    on_delete=models.CASCADE,
+    null=True,
+    blank=True
+)
+```
+
+```python
+if form.is_valid():
+    student = form.save(commit=False)
+    student.created_by = request.user
+    student.save()
+    return redirect("student-list")
+```
+
+Remember: this is a new model field, so it needs its own migration:
+
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+**Expected result:** The student list shows an extra "Added by" column with each record's creator, and new students are automatically attributed to whoever is logged in when they create them.
+
+*(This is intentionally similar in spirit to the fields you already know from `Student` — it does not require ForeignKey deep-dives or advanced relationships to complete.)*
+
+---
+
+# 🏁 Final Session 3 Checklist
+
+- [ ] Authentication implemented
+- [ ] Registration tested
+- [ ] Login tested
+- [ ] Logout tested
+- [ ] Protected student pages tested
+- [ ] Git repository updated
+- [ ] Project pushed to GitHub
+- [ ] `.gitignore` protects `venv/`, `.env`, and `db.sqlite3`
+- [ ] Production dependencies configured (`psycopg2-binary`, `dj-database-url`, `gunicorn`, `whitenoise`)
+- [ ] `DATABASES` reads from `DATABASE_URL`
+- [ ] `SECRET_KEY`, `DEBUG`, and `ALLOWED_HOSTS` read from environment variables
+- [ ] Render PostgreSQL created
+- [ ] Render Web Service created and connected to GitHub
+- [ ] Environment variables configured on Render
+- [ ] Deployed successfully
+- [ ] Migrations applied on Render
+- [ ] Production superuser created
+- [ ] Live application tested
+- [ ] CRUD tested on the live application
+- [ ] Django Admin tested on the live application
+- [ ] Database persistence verified after a redeploy
+
+---
+
+# 🎓 43. From Session 1 to a Live Application
+
+```text
 Session 1
-Django Fundamentals
-        ↓
+Static Django Website
+
+    ↓
+
 Session 2
-Database & CRUD
-        ↓
+Dynamic CRUD Application
+
+    ↓
+
 Session 3
-Authentication, GitHub & Deployment
-        ↓
-Complete Student Management System
-🚀 Bootcamp Complete
+Authenticated Application
 
-The same project has evolved through all three sessions.
+    ↓
 
-Student Management System
-          │
-          ├── Django
-          ├── Templates
-          ├── Bootstrap
-          ├── Database
-          ├── ORM
-          ├── CRUD
-          ├── Authentication
-          ├── Git
-          ├── GitHub
-          ├── PostgreSQL
-          └── Render
+GitHub
 
-You started with a basic Django website and finished with a deployed, database-backed application.
+    ↓
+
+PostgreSQL
+
+    ↓
+
+Render
+
+    ↓
+
+🌐 LIVE STUDENT MANAGEMENT SYSTEM
+```
+
+You started this bootcamp writing your very first Django view. Since then you have:
+
+* Built URLs, views, templates, and template inheritance
+* Connected a database and implemented full CRUD with a `ModelForm`
+* Added real authentication with registration, login, logout, and protected pages
+* Put your project under version control with Git and pushed it to GitHub
+* Connected a production PostgreSQL database through an environment variable
+* Deployed the whole application to Render
+
+Your Student Management System is no longer just a learning exercise running on your laptop — it's a real, authenticated, database-backed web application, live on the internet, that anyone can visit.
+
+---
+
+# 🎉 Bootcamp Complete
+
+```text
+Python
+  ↓
+Django
+  ↓
+URLs → Views → Templates
+  ↓
+Database → Models → CRUD
+  ↓
+Authentication
+  ↓
+Git → GitHub
+  ↓
+PostgreSQL
+  ↓
+Render
+  ↓
+🌐 LIVE STUDENT MANAGEMENT SYSTEM
+```
+
+Congratulations — you've completed the Django Web Development Bootcamp.
