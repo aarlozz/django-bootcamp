@@ -1,5 +1,4 @@
 Session 3 — Authentication, GitHub & Deployment
-
 Turn It Into a Real Application
 
 Django Web Development Bootcamp — Session 3
@@ -31,21 +30,13 @@ LIVE APPLICATION
 Our Student Management System will now become an application that can:
 
 Register users
-
 Log users in
-
 Log users out
-
 Protect student management pages
-
 Track code with Git
-
 Store the project on GitHub
-
 Use PostgreSQL in production
-
 Run as a deployed Django application
-
 🧠 What We Will Build
 
 Our Student Management System will gradually become:
@@ -86,94 +77,40 @@ It will be a deployed web application that can be accessed through the internet.
 During this session, you will learn how to:
 
 Understand Django authentication
-
 Understand users and sessions
-
 Create a registration page
-
 Use Django's built-in authentication system
-
 Implement login
-
 Implement logout
-
 Display the authenticated user
-
 Protect views using login_required
-
 Understand Git
-
 Initialize a Git repository
-
 Create a .gitignore
-
 Create commits
-
 Create a GitHub repository
-
 Push the Django project to GitHub
-
 Understand why SQLite is useful for development
-
 Understand why PostgreSQL is suitable for production
-
 Connect Django to PostgreSQL
-
 Use environment variables
-
 Configure static files for deployment
-
 Create a deployment build script
-
 Deploy the Django application to Render
-
 Run production migrations
-
 Create a production superuser
-
 Test authentication and CRUD on the live application
-
 ⏱️ Suggested 3-Hour Workshop Plan
-
-Time
-
-Topic
-
-0:00 – 0:10
-
-Recap of Session 2
-
-0:10 – 0:45
-
-Django Authentication
-
-0:45 – 1:15
-
-Login, Logout & Protected Pages
-
-1:15 – 1:25
-
-Short Break
-
-1:25 – 1:45
-
-Git & GitHub
-
-1:45 – 2:00
-
-Push Project to GitHub
-
-2:00 – 2:20
-
-SQLite → PostgreSQL
-
-2:20 – 2:50
-
-Deploy Django Application to Render
-
-2:50 – 3:00
-
-Testing, Challenge & Final Recap
+Time	Topic
+0:00 – 0:10	Recap of Session 2
+0:10 – 0:45	Django Authentication
+0:45 – 1:15	Login, Logout & Protected Pages
+1:15 – 1:25	Short Break
+1:25 – 1:45	Git & GitHub
+1:45 – 2:00	Push Project to GitHub
+2:00 – 2:20	SQLite → PostgreSQL
+2:20 – 2:50	Deploy Django Application to Render
+2:50 – 3:00	Testing, Challenge & Final Recap
 
 Tip: Do not worry if your code is not identical to the instructor's code at every step. The important thing is understanding what each part does.
 
@@ -258,7 +195,6 @@ Authentication
 Authenticated User
   ↓
 Student Management System
-
 👤 2. Django's Built-in Authentication
 
 Django already provides an authentication system.
@@ -266,15 +202,10 @@ Django already provides an authentication system.
 It includes functionality for:
 
 Users
-
 Passwords
-
 Login
-
 Logout
-
 Sessions
-
 Authentication checks
 
 Django already includes:
@@ -335,7 +266,6 @@ def register(request):
         "students/register.html",
         {"form": form}
     )
-
 🧠 Understanding the Registration View
 
 When the user submits the registration form:
@@ -417,7 +347,6 @@ Notice that we are still using the same template inheritance structure from the 
 base.html
     ↓
 register.html
-
 🔗 5. Add the Registration URL
 
 Open:
@@ -465,7 +394,6 @@ path(
     ),
     name="login"
 ),
-
 📄 7. Create the Login Template
 
 Create:
@@ -513,7 +441,6 @@ Login - Student Management System
 </div>
 
 {% endblock %}
-
 ↪️ 8. Configure Login Redirect
 
 Open:
@@ -536,7 +463,6 @@ and:
 Logout
    ↓
 /
-
 🚪 9. Add Logout
 
 We can use Django's built-in logout view.
@@ -556,7 +482,6 @@ path(
 The URL becomes:
 
 /logout/
-
 🛡️ 10. Protect the Student Pages
 
 This is one of the most important concepts in this session.
@@ -578,7 +503,6 @@ Anonymous User
 Login Required
       ↓
 /login/
-
 🔒 11. Use login_required
 
 Open:
@@ -624,11 +548,9 @@ For example:
 @login_required
 def student_create(request):
     ...
-
 @login_required
 def student_update(request, student_id):
     ...
-
 @login_required
 def student_delete(request, student_id):
     ...
@@ -648,7 +570,6 @@ Our application now works like:
                        ┌───────────┼───────────┐
                        ↓           ↓           ↓
                      Create       Edit       Delete
-
 🧭 13. Update the Navigation Bar
 
 Open:
@@ -701,13 +622,11 @@ and:
 Logged In
      ↓
 Hello, username | Logout
-
 🧪 14. Test Authentication
 
 Start the server:
 
 python manage.py runserver
-
 Test Registration
 
 Open:
@@ -725,7 +644,6 @@ Account Created
 Automatically Logged In
      ↓
 /students/
-
 Test Logout
 
 Click:
@@ -737,7 +655,6 @@ Expected:
 Logout
    ↓
 Homepage
-
 Test Protected Page
 
 After logout, visit:
@@ -751,7 +668,6 @@ Expected:
 Not Authenticated
       ↓
 /login/
-
 Test Login
 
 Log in again.
@@ -763,7 +679,6 @@ Login
 /students/
   ↓
 Student CRUD Available
-
 📦 15. What Is Git?
 
 Our project is becoming larger.
@@ -775,11 +690,8 @@ Git is a version control system.
 It allows us to:
 
 Track changes
-
 Save versions of the project
-
 See project history
-
 Return to previous versions
 
 Think of it as:
@@ -791,7 +703,6 @@ Git
 Commits
    ↓
 Project History
-
 🌐 16. Git vs GitHub
 
 Git and GitHub are not the same thing.
@@ -813,7 +724,6 @@ Local Repository
 GitHub
  ↓
 Remote Repository
-
 🛠️ 17. Initialize Git
 
 From the project root:
@@ -842,7 +752,6 @@ __pycache__/
 *.py[cod]
 db.sqlite3
 .env
-
 Why ignore db.sqlite3?
 
 Because this is our local development database.
@@ -875,7 +784,6 @@ git commit -m "Complete authentication"
 Check the history:
 
 git log --oneline
-
 🐙 20. Create a GitHub Repository
 
 Create a new repository on GitHub.
@@ -914,13 +822,9 @@ db.sqlite3
 SQLite is excellent for learning because:
 
 No separate database server is required
-
 Django supports it by default
-
 The database is stored in a single file
-
 It is simple to set up
-
 It is excellent for small projects and workshops
 
 However, when we deploy the application, we want a proper persistent production database.
@@ -930,7 +834,6 @@ We will use:
 Django
   ↓
 PostgreSQL
-
 🔄 22. SQLite → PostgreSQL
 
 We are not changing our Student model.
@@ -988,7 +891,6 @@ pip install gunicorn
 Save the dependencies:
 
 pip freeze > requirements.txt
-
 🔐 24. Environment Variables
 
 We should not put production secrets directly into our source code.
@@ -1014,7 +916,6 @@ Render
           │
           ↓
       PostgreSQL
-
 ⚙️ 25. Configure the Database
 
 Open:
@@ -1048,15 +949,12 @@ else:
 Now the application behaves differently depending on the environment.
 
 Local Development
-
 No DATABASE_URL
        ↓
 SQLite
        ↓
 db.sqlite3
-
 Render
-
 DATABASE_URL exists
        ↓
 PostgreSQL
@@ -1085,7 +983,6 @@ Configure:
 STATIC_URL = "static/"
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
-
 🔑 27. Configure the Secret Key
 
 We should not hard-code the production secret key.
@@ -1116,16 +1013,9 @@ DEBUG = os.environ.get(
     "False"
 ) == "True"
 
-Locally:
-
-DEBUG=True
-
-can be used when needed.
-
 On Render:
 
 DEBUG=False
-
 📜 29. Create build.sh
 
 Create a new file in the project root:
@@ -1155,7 +1045,6 @@ Collect Static Files
 Run Migrations
         ↓
 Start Application
-
 🧪 30. Test Before Deployment
 
 Before deploying, test the project locally.
@@ -1207,7 +1096,7 @@ git push
 
 Your GitHub repository should now contain the deployment-ready project.
 
-🚂 32. Deploy to Render
+🌐 32. Deploy to Render
 
 For deployment, our architecture will be:
 
@@ -1226,17 +1115,13 @@ We will create two production resources:
 
 1. Render Web Service
 2. Render PostgreSQL Database
-
 🗄️ 33. Create a PostgreSQL Database
 
 In Render:
 
 Create a new PostgreSQL database.
-
 Give the database a name.
-
 Wait until the database is available.
-
 Use the database connection URL for the web service.
 
 The important relationship is:
@@ -1246,29 +1131,19 @@ Render PostgreSQL
 DATABASE_URL
        ↓
 Django
-
 🌐 34. Create the Render Web Service
 
 In Render:
 
 Create a new Web Service.
-
 Connect your GitHub account.
-
 Select your repository:
-
 student-management-system
-
 Select the appropriate Python environment.
-
 Configure the build command:
-
 ./build.sh
-
 Configure the start command:
-
 python -m gunicorn config.asgi:application -k uvicorn.workers.UvicornWorker
-
 🔐 35. Add Environment Variables
 
 In the Render service settings, add:
@@ -1297,7 +1172,6 @@ Render
   ├── DATABASE_URL
   │
   └── PostgreSQL
-
 🚀 36. Deploy the Application
 
 Click:
@@ -1359,15 +1233,12 @@ https://your-project.onrender.com/
 Test the public pages:
 
 /
-
 /about/
 
 Test authentication:
 
 /register/
-
 /login/
-
 /logout/
 
 Test protected pages:
@@ -1384,7 +1255,6 @@ Delete
 Test Admin:
 
 /admin/
-
 💾 39. Verify PostgreSQL Persistence
 
 Create a student on the live application:
@@ -1424,15 +1294,12 @@ is no longer responsible for production data.
 Our application has now evolved significantly.
 
 Before Session 2
-
 Browser
    ↓
 Django
    ↓
 Templates
-
 After Session 2
-
 Browser
    ↓
 Django
@@ -1440,9 +1307,7 @@ Django
 ORM
    ↓
 SQLite
-
 After Session 3
-
                          Browser
                             ↓
                          Render
@@ -1458,31 +1323,20 @@ After Session 3
                   └─────────┬─────────┘
                             ↓
                     Student Management
-
 🧩 41. Session 3 Challenge
-
 Protect the Student Management System
 
 Now implement and test the following yourself.
 
 Requirements
-
-Anonymous users cannot access /students/
-
-Anonymous users cannot create students
-
-Anonymous users cannot update students
-
-Anonymous users cannot delete students
-
-Logged-in users can perform CRUD
-
-The navbar displays the logged-in username
-
-Logged-in users can logout
-
-After logout, protected pages require login again
-
+ Anonymous users cannot access /students/
+ Anonymous users cannot create students
+ Anonymous users cannot update students
+ Anonymous users cannot delete students
+ Logged-in users can perform CRUD
+ The navbar displays the logged-in username
+ Logged-in users can logout
+ After logout, protected pages require login again
 Hint
 
 Use:
@@ -1494,7 +1348,6 @@ Then:
 @login_required
 def your_view(request):
     ...
-
 Expected Result
 
 When not logged in:
@@ -1508,9 +1361,7 @@ When logged in:
 /students/
       ↓
 Student CRUD
-
 ⚠️ 42. Common Problems
-
 TemplateDoesNotExist
 
 Example:
@@ -1521,7 +1372,6 @@ students/login.html
 Make sure the file exists at:
 
 students/templates/students/login.html
-
 NoReverseMatch
 
 Example:
@@ -1542,7 +1392,6 @@ path(
     ),
     name="login"
 )
-
 ModuleNotFoundError: dj_database_url
 
 Install:
@@ -1552,7 +1401,6 @@ pip install dj-database-url
 Then:
 
 pip freeze > requirements.txt
-
 ModuleNotFoundError: psycopg2
 
 Install:
@@ -1562,7 +1410,6 @@ pip install psycopg2-binary
 Then:
 
 pip freeze > requirements.txt
-
 collectstatic Error
 
 Check:
@@ -1573,7 +1420,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 and make sure WhiteNoise is installed:
 
 pip install whitenoise
-
 Database Connection Error
 
 Check:
@@ -1589,63 +1435,33 @@ DisallowedHost
 Make sure the deployed hostname is allowed by Django's ALLOWED_HOSTS configuration.
 
 🏁 43. Final Session 3 Checklist
-
-Before leaving the session, make sure you can answer yes to these questions:
-
 Authentication
-
-Do I understand authentication?
-
-Can I register a user?
-
-Can I log in?
-
-Can I log out?
-
-Do I understand user.is_authenticated?
-
-Can I protect a view with login_required?
-
-Are the Student CRUD pages protected?
-
+ Do I understand authentication?
+ Can I register a user?
+ Can I log in?
+ Can I log out?
+ Do I understand user.is_authenticated?
+ Can I protect a view with login_required?
+ Are the Student CRUD pages protected?
 Git & GitHub
-
-Do I understand what Git is?
-
-Do I understand the difference between Git and GitHub?
-
-Can I initialize a Git repository?
-
-Do I know why .gitignore is needed?
-
-Can I create a commit?
-
-Can I connect a local repository to GitHub?
-
-Can I push my project to GitHub?
-
+ Do I understand what Git is?
+ Do I understand the difference between Git and GitHub?
+ Can I initialize a Git repository?
+ Do I know why .gitignore is needed?
+ Can I create a commit?
+ Can I connect a local repository to GitHub?
+ Can I push my project to GitHub?
 Deployment
-
-Do I understand why SQLite is useful locally?
-
-Do I understand why we use PostgreSQL for production?
-
-Can I configure DATABASE_URL?
-
-Do I understand environment variables?
-
-Can I configure static files?
-
-Can I create build.sh?
-
-Can I deploy a Django project to Render?
-
-Can I run migrations on the production database?
-
-Can I create a production superuser?
-
-Can I test the live application?
-
+ Do I understand why SQLite is useful locally?
+ Do I understand why we use PostgreSQL for production?
+ Can I configure DATABASE_URL?
+ Do I understand environment variables?
+ Can I configure static files?
+ Can I create build.sh?
+ Can I deploy a Django project to Render?
+ Can I run migrations on the production database?
+ Can I create a production superuser?
+ Can I test the live application?
 💡 The Big Idea
 
 Don't leave this session thinking:
@@ -1701,7 +1517,6 @@ DJANGO ORM
 POSTGRESQL
   ↓
 RENDER
-
 🎓 Session 3 Complete
 
 You have taken the Student Management System from a local database-backed Django project to a more complete web application with:
@@ -1730,7 +1545,6 @@ Session 3
 Authentication, GitHub & Deployment
         ↓
 Complete Student Management System
-
 🚀 Bootcamp Complete
 
 The same project has evolved through all three sessions.
